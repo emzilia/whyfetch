@@ -31,16 +31,40 @@ char *get_username(void)
 
 char *get_hostname(void)
 {
-	char *hostname = getenv("HOSTNAME");
+	const int bufferSize = 32;
+	char buffer[bufferSize];
+	char *result = NULL;
+	size_t resultSize = 0;
 
-	size_t hostlength = strlen(hostname);
+	const char *command = (
+		"hostname"
+	);
+	
+	FILE *p = popen(command, "r");
+	if (p == NULL) return NULL;
+	
+	while (fgets(buffer, bufferSize, p) != NULL) {
+		size_t fragmentSize = strlen(buffer);
+		char *newResult = realloc(
+			result, resultSize + fragmentSize + 1
+		);
+		result = newResult;
+		memcpy(result + resultSize, buffer, fragmentSize);
+		resultSize += fragmentSize;
+	}
 
-	char *hostcopy = malloc(hostlength + 1);
-	strncpy(hostcopy, hostname, hostlength);
-	hostcopy[hostlength] = '\0';
-	return hostcopy;
+	int status = pclose(p);
+	if (status == -1) free(result);
 
+	char*finalResult = realloc(result, resultSize + 1);
+	finalResult[resultSize] = '\0';
+
+	finalResult[strcspn(finalResult, "\n")] = 0;
+
+	return finalResult;
 }
+
+
 char *get_prettyname(void)
 {
 	const int bufferSize = 32;
@@ -152,17 +176,17 @@ int main(void)
 	char *kernelv = get_kernelv();
 	char *usershell = get_shell();
 
-	//char *resultDuck1 = combine_ascii(duck1, userhost);
-	//char *resultDuck2 = combine_ascii(duck2, prettyname);
-	//char *resultDuck3 = combine_ascii(duck3, kernelv);
-	//char *resultDuck4 = combine_ascii(duck4, usershell);
+	char *resultDuck1 = combine_ascii(duck1, userhost);
+	char *resultDuck2 = combine_ascii(duck2, prettyname);
+	char *resultDuck3 = combine_ascii(duck3, kernelv);
+	char *resultDuck4 = combine_ascii(duck4, usershell);
 	//char *resultDuck5 = combine_ascii(duck1, userhost);
 	
 	
 	printf(
 		"%s\n%s\n%s\n%s\n%s\n",
-		duck1, duck2, duck3,
-		duck4, duck5
+		resultDuck1, resultDuck2, resultDuck3,
+		resultDuck4, duck5
 	);
 
     return 0;
