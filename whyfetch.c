@@ -3,6 +3,14 @@
 #include <string.h>
 #include <pwd.h>
 
+char *get_username(void);
+char *get_hostname(void);
+char *get_prettyname(void);
+char *get_shell(void);
+char *get_kernelv(void);
+char *combine_userhost(char *username, char *hostname);
+char *combine_ascii(char* ascii, char* data);
+
 char *duck1 = "\n       ,~~.	   Who: ";
 char *duck2 = "  ,   (  - )>	    OS: ";
 char *duck3 = "  )`~~'   (	Kernel: ";
