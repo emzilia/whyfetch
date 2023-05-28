@@ -1,5 +1,5 @@
 # whyfetch
-why make another fetch app? to what end??
+why make another fetch app? just a fun little thing really
 
 ```
   
