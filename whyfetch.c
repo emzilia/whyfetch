@@ -11,12 +11,14 @@ char *get_kernelv(void);
 char *combine_userhost(char *username, char *hostname);
 char *combine_ascii(char* ascii, char* data);
 
+// ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
 char *duck1 = "\n       ,~~.	   	";
 char *duck2 = "  ,   (  - )>	   Who: ";
 char *duck3 = "  )`~~'   (	    OS: ";
 char *duck4 = " (  .__)   )	Kernel: ";
 char *duck5 = "  `-.____,' 	 Shell: ";
 
+// Username acquired from environment variable, ensures null termination.
 char *get_username(void)
 {
 	char *username = getenv("USER");
@@ -29,6 +31,7 @@ char *get_username(void)
 	return namecopy;
 }
 
+// Hostname acquired by piping in the output of the hostname command.
 char *get_hostname(void)
 {
 	const int bufferSize = 32;
@@ -36,11 +39,7 @@ char *get_hostname(void)
 	char *result = NULL;
 	size_t resultSize = 0;
 
-	const char *command = (
-		"hostname"
-	);
-	
-	FILE *p = popen(command, "r");
+	FILE *p = popen("hostname", "r");
 	if (p == NULL) return NULL;
 	
 	while (fgets(buffer, bufferSize, p) != NULL) {
@@ -65,6 +64,8 @@ char *get_hostname(void)
 }
 
 
+// Pretty OS name taken from /etc/os-release, piped in from a series
+// of commands.
 char *get_prettyname(void)
 {
 	const int bufferSize = 32;
@@ -100,12 +101,14 @@ char *get_prettyname(void)
 	return finalResult;
 }
 
+// Current shell also taken from environment.
 char *get_shell(void)
 {
     char *shell = getenv("SHELL");
     return shell;
 } 
 
+// Kernel version from piping in the output of uname -r.
 char *get_kernelv(void)
 {
 	const int bufferSize = 32;
@@ -137,6 +140,7 @@ char *get_kernelv(void)
 	return finalResult;
 }
 
+// Both the username and hostname are combined with a @ sign separating them.
 char *combine_userhost(char *username, char *hostname)
 {
 	char *atsign = "@";
@@ -152,6 +156,7 @@ char *combine_userhost(char *username, char *hostname)
 	return result;
 }
 
+// ASCII art is combined with the previous data, so it's evenly spaced.
 char *combine_ascii(char* ascii, char* data)
 {
 	size_t resultSize = (
