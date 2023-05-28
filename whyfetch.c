@@ -176,29 +176,16 @@ int main(void)
 	char *kernelv = get_kernelv();
 	char *usershell = get_shell();
 
-<<<<<<< HEAD
-	char *resultDuck1 = combine_ascii(duck1, userhost);
-	char *resultDuck2 = combine_ascii(duck2, prettyname);
-	char *resultDuck3 = combine_ascii(duck3, kernelv);
-	char *resultDuck4 = combine_ascii(duck4, usershell);
-	//char *resultDuck5 = combine_ascii(duck1, userhost);
-=======
 	char *resultDuck2 = combine_ascii(duck2, userhost);
 	char *resultDuck3 = combine_ascii(duck3, prettyname);
 	char *resultDuck4 = combine_ascii(duck4, kernelv);
 	char *resultDuck5 = combine_ascii(duck5, usershell);
->>>>>>> ce69a05 (adjusted line spacing)
 	
 	
 	printf(
 		"%s\n%s\n%s\n%s\n%s\n",
-<<<<<<< HEAD
-		resultDuck1, resultDuck2, resultDuck3,
-		resultDuck4, duck5
-=======
 		duck1, resultDuck2, resultDuck3,
 		resultDuck4, resultDuck5
->>>>>>> ce69a05 (adjusted line spacing)
 	);
 	puts("\n");
 
