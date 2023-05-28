@@ -3,7 +3,6 @@
 #include <string.h>
 
 char *get_commandout(char *usercommand);
-char *combine_ascii(char *ascii, char *data);
 
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
 char *duck1 = "        ,~~.            ";
@@ -13,7 +12,7 @@ char *duck4 = "  (  .__)   )   Kernel: ";
 char *duck5 = "   `-.____,'     Shell: ";
 
 // User data is acquired by saving the output of serveral commands,
-// detailed below. The command output is piped in and null terminated
+// the command output is piped in and null terminated
 // before being returned.
 char *get_commandout(char *usercommand)
 {
@@ -46,21 +45,6 @@ char *get_commandout(char *usercommand)
 
 }
 
-// ASCII art is combined with the previous data, so it's evenly spaced.
-char *combine_ascii(char *ascii, char *data)
-{
-	size_t resultSize = (
-		strlen(ascii) + strlen(data) + 1
-	);
-
-	char *resultDuck = (char*)malloc(resultSize);
-
-	sprintf(resultDuck, "%s%s", ascii, data);
-
-	return resultDuck;
-
-}
-
 int main(void)
 {
 	// Command output is captured.
@@ -72,19 +56,15 @@ int main(void)
 	char *kernelv = get_commandout("uname -r");
 	char *usershell = get_commandout("echo $SHELL");
 	
-	// User data is combined with the ASCII art so it can be to the side
-	// of the text.
-	char *resultDuck2 = combine_ascii(duck2, userhost);
-	char *resultDuck3 = combine_ascii(duck3, prettyname);
-	char *resultDuck4 = combine_ascii(duck4, kernelv);
-	char *resultDuck5 = combine_ascii(duck5, usershell);
-	
-	// The result duck is combined with the original duck to form
+	// The user data is combined with the ascii art to form
 	// a cute little fetch thing.	
 	printf(
-		"\n%s\n%s\n%s\n%s\n%s\n\n\n",
-		duck1, resultDuck2, resultDuck3,
-		resultDuck4, resultDuck5
+		"\n%s\n%s%s\n%s%s\n%s%s\n%s%s\n\n\n",
+		duck1,
+		duck2, userhost,
+		duck3, prettyname,
+		duck4, kernelv, 
+		duck5, usershell
 	);
 
 	return 0;
