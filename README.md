@@ -3,11 +3,4 @@ Why make another fetch app? Just a fun little thing really.
 
 Now with color!
 
-```
-        ,~~.
-   ,   (  - )>     Who: cagnaccia@parthenon
-   )`~~'   (        OS: Arch Linux
-  (  .__)   )   Kernel: 6.3.3-arch1-1
-   `-.____,'     Shell: /bin/bash
-
-```
+![whyfetch](https://i.ibb.co/PcYkKhv/whyfetch.png)
