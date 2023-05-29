@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define ANSI_COLOR_MAGENTA	"\x1b[35m"
+#define ANSI_COLOR_WHITE	"\x1b[37m"
+#define ANSI_COLOR_RESET	"\x1b[0m"
+
 char *get_commandout(char *usercommand);
+
 
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
 char *duck1 = "        ,~~.            ";
@@ -58,13 +63,22 @@ int main(void)
 	// The user data is combined with the ascii art to form
 	// a cute little fetch thing.	
 	printf(
-		"\n%s\n%s%s\n%s%s\n%s%s\n%s%s\n\n\n",
+		ANSI_COLOR_MAGENTA "\n%s" ANSI_COLOR_RESET
+		ANSI_COLOR_MAGENTA	"\n%s"	ANSI_COLOR_RESET
+		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_MAGENTA 	"\n%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_MAGENTA 	"\n%s"	ANSI_COLOR_RESET
+		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_MAGENTA 	"\n%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
+		"\n\n\n",
 		duck1,
 		duck2, userhost,
 		duck3, prettyname,
 		duck4, kernelv, 
 		duck5, usershell
 	);
-
+	
 	return 0;
 }
