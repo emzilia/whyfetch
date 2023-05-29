@@ -1,6 +1,8 @@
 # whyfetch
 Why make another fetch app? Just a fun little thing really.
 
+Now with color!
+
 ```
         ,~~.
    ,   (  - )>     Who: cagnaccia@parthenon
