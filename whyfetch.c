@@ -68,7 +68,7 @@ int main(void)
 	// The user data is combined with the ascii art to form
 	// a cute little fetch thing.	
 	printf(
-		ANSI_COLOR_MAGENTA "\n%s" ANSI_COLOR_RESET
+		ANSI_COLOR_YELLOW	"\n%s"	ANSI_COLOR_RESET
 		ANSI_COLOR_YELLOW	"\n%s"	ANSI_COLOR_RESET
 		ANSI_COLOR_MAGENTA 	"%s" 	ANSI_COLOR_RESET
 		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
