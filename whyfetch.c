@@ -26,7 +26,7 @@ char *shell = " Shell: ";
 // before being returned.
 char *get_commandout(char *usercommand)
 {
-	const int bufferSize = 32;
+	const int bufferSize = 64;
 	char buffer[bufferSize];
 	char *output = NULL;
 	size_t outputSize = 0;
