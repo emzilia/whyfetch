@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ANSI_COLOR_YELLOW	"\x1b[33m"
-#define ANSI_COLOR_MAGENTA	"\x1b[35m"
-#define ANSI_COLOR_WHITE	"\x1b[37m"
+#define ANSI_COLOR_YELLOW	"\x1b[93m"
+#define ANSI_COLOR_MAGENTA	"\x1b[95m"
+#define ANSI_COLOR_WHITE	"\x1b[97m"
 #define ANSI_COLOR_RESET	"\x1b[0m"
 
 char *get_commandout(char *usercommand);
