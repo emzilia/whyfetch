@@ -44,7 +44,7 @@ char *search_file(char *search, char *file)
 	}
 
 	// Default if nothing is found or file couldn't be opened
-	name = (char *)malloc(14*sizeof(char));
+	name = (char *)malloc(15*sizeof(char));
 	name = "something wild";
 	return name;
 }
@@ -53,6 +53,7 @@ char *search_file(char *search, char *file)
 char *get_prettyname()
 {
 	char *prettyname = search_file("PRETTY_NAME", "/etc/os-release");
+	if (!strcmp(prettyname, "something wild")) return prettyname;
 
 	// Removes first 13 characters, the "PRETTY_NAME='" 
 	memmove(prettyname, prettyname + 13, strlen(prettyname) + 1 - 13);
