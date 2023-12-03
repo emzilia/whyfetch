@@ -44,8 +44,8 @@ char *search_file(char *search, char *file)
 		}
 	}
 
-	// Default if nothing is found
-	name = (char *)malloc(15*sizeof(char));
+	// Default if nothing is found or file couldn't be opened
+	name = (char *)malloc(14*sizeof(char));
 	name = "something wild";
 	return name;
 }
