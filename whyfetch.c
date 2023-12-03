@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <pwd.h>
+#include <sys/utsname.h>
 
 #define ANSI_COLOR_YELLOW	"\x1b[93m"
 #define ANSI_COLOR_MAGENTA	"\x1b[95m"
@@ -8,6 +11,7 @@
 #define ANSI_COLOR_RESET	"\x1b[0m"
 
 char *get_commandout(char *usercommand);
+char *get_username();
 
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
 char *duck1 = "        ,~~.   ";
@@ -21,50 +25,56 @@ char *os = "    OS: ";
 char *kernel = "Kernel: ";
 char *shell = " Shell: ";
 
-// User data is acquired by saving the output of serveral commands,
-// the command output is piped in and null terminated
-// before being returned.
-char *get_commandout(char *usercommand)
+// Searches a file for a keyword and returns the line of text its found on
+char *search_file(char *search, char *file)
 {
-	const int bufferSize = 64;
-	char buffer[bufferSize];
-	char *output = NULL;
-	size_t outputSize = 0;
+	char line[1024];
+	char *name;
+	FILE *f;
 
-	FILE *p = popen(usercommand, "r");
-	if (p == NULL) return NULL;
-	
-	while (fgets(buffer, bufferSize, p) != NULL) {
-		size_t fragmentSize = strlen(buffer);
-		char *newOutput = realloc(
-			output, outputSize + fragmentSize + 1
-		);
-		output = newOutput;
-		memcpy(output + outputSize, buffer, fragmentSize);
-		outputSize += fragmentSize;
+	name = (char *)malloc(1024*sizeof(char));
+	f = fopen(file, "r");
+	while (fgets(line, sizeof(line), f) != NULL) {
+		if (strstr(line, search) != NULL) {
+			name = (char *)malloc(sizeof(line) - 1);
+			strncpy(name, line, sizeof(line) - 1);
+			return name;
+		}
 	}
 
-	int status = pclose(p);
-	if (status == -1) free(output);
+	// Default if nothing is found
+	return "something wild";
+}
 
-	char *finalOutput = realloc(output, outputSize + 1);
-	finalOutput[outputSize] = '\0';
-	finalOutput[strcspn(finalOutput, "\n")] = 0;
+// Searches /etc/os-release for the 'pretty name', cleans it before returning
+char *get_prettyname()
+{
+	char *prettyname = search_file("PRETTY_NAME", "/etc/os-release");
 
-	return finalOutput;
+	// Removes first 13 characters, the "PRETTY_NAME='" 
+	memmove(prettyname, prettyname + 13, strlen(prettyname) + 1 - 13);
+
+	// Removes last 2 characters, closing quotation mark and newline character
+	prettyname[strlen(prettyname) - 2] = '\0';
+
+	return prettyname;
 }
 
 int main(void)
 {
-	// Command output is captured.
-	char *username = get_commandout("whoami");
-	char *userhost = get_commandout("hostname");
-	char *prettyname = get_commandout(
-		"grep PRETTY /etc/os-release | cut -d '\"' -f2"
-	);
-	char *kernelv = get_commandout("uname -r");
-	char *usershell = get_commandout("echo $SHELL");
-	
+	// Get hostname and kernel version with utsname struct
+	struct utsname user;
+	if (uname(&user) < 0) return EXIT_FAILURE;
+	char *hostname = user.nodename;
+	char *kernelv = user.release;
+
+	// Get username and user's shell with passwd struct
+	char *username = getpwuid(geteuid())->pw_name;
+	char *usershell = getpwuid(geteuid())->pw_shell;
+
+	// Get prettyname from /etc/os-release
+	char *prettyname = get_prettyname();
+
 	// The user data is combined with the ascii art to form
 	// a cute little fetch thing.	
 	printf(
@@ -83,11 +93,11 @@ int main(void)
 		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
 		"\n\n\n",
 		duck1,
-		duck2, who, username, userhost,
+		duck2, who, username, hostname,
 		duck3, os, prettyname,
 		duck4, kernel, kernelv, 
 		duck5, shell, usershell
 	);
 	
-	return 0;
+	return EXIT_SUCCESS;
 }
