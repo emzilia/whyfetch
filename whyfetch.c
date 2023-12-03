@@ -32,7 +32,6 @@ char *search_file(char *search, char *file)
 	char *name;
 	FILE *f;
 
-	name = (char *)malloc(1024*sizeof(char));
 	f = fopen(file, "r");
 	if (f) {
 		while (fgets(line, sizeof(line), f) != NULL) {
