@@ -45,7 +45,9 @@ char *search_file(char *search, char *file)
 	}
 
 	// Default if nothing is found
-	return "something wild";
+	name = (char *)malloc(15*sizeof(char));
+	name = "something wild";
+	return name;
 }
 
 // Searches /etc/os-release for the 'pretty name', cleans it before returning
