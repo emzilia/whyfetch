@@ -13,6 +13,12 @@
 char *search_file(char *search, char *file);
 char *get_prettyname();
 
+typedef struct User {
+	char *usershell;
+	char *osname;
+	char *hostkernel;
+} User;
+
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
 char *duck1 = "        ,~~.   ";
 char *duck2 = "   ,   (  - )> ";
@@ -44,8 +50,8 @@ char *search_file(char *search, char *file)
 	}
 
 	// Default if nothing is found or file couldn't be opened
-	name = (char *)malloc(15*sizeof(char));
 	name = "something wild";
+
 	return name;
 }
 
@@ -66,18 +72,34 @@ char *get_prettyname()
 
 int main(void)
 {
-	// Get hostname and kernel version with utsname struct
-	struct utsname user;
-	if (uname(&user) < 0) return EXIT_FAILURE;
-	char *hostname = user.nodename;
-	char *kernelv = user.release;
+	char *username;
+	char *usershell;
+	char *hostname;
+	char *userkernel;
+	char *prettyname;
+	
+	struct passwd *user = getpwuid(geteuid());
+	// Gets details from passwd struct, otherwise uses default values
+	if (user) {
+		username = user->pw_name;
+		usershell = user->pw_shell;
+	} else {
+		username = "user";
+		usershell = "shell";
+	}
 
-	// Get username and user's shell with passwd struct
-	char *username = getpwuid(geteuid())->pw_name;
-	char *usershell = getpwuid(geteuid())->pw_shell;
-
-	// Get prettyname from /etc/os-release
-	char *prettyname = get_prettyname();
+	struct utsname system;
+	// Gets details from utsname struct, otherwise uses default values
+	if ((uname(&system)) > -1) {
+		hostname = system.nodename;
+		userkernel = system.release;
+	} else {
+		printf("error: %d", uname(&system));
+		hostname = "hostname";
+		userkernel = "kernel";
+	}
+	
+	prettyname = get_prettyname();
 
 	// The user data is combined with the ascii art to form
 	// a cute little fetch thing.	
@@ -99,7 +121,7 @@ int main(void)
 		duck1,
 		duck2, who, username, hostname,
 		duck3, os, prettyname,
-		duck4, kernel, kernelv, 
+		duck4, kernel, userkernel, 
 		duck5, shell, usershell
 	);
 	
