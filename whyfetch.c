@@ -10,16 +10,13 @@
 #define ANSI_COLOR_WHITE	"\x1b[97m"
 #define ANSI_COLOR_RESET	"\x1b[0m"
 
-char *search_file(char *search, char *file);
+char *get_username();
+char *get_hostname();
+char *get_shell();
+char *get_kernel();
+char *search_release();
 char *get_prettyname();
 
-typedef struct User {
-	char *usershell;
-	char *osname;
-	char *hostkernel;
-} User;
-
-// ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
 char *duck1 = "        ,~~.   ";
 char *duck2 = "   ,   (  - )> ";
 char *duck3 = "   )`~~'   (   ";
@@ -28,15 +25,77 @@ char *duck5 = "   `-.____,'   ";
 
 char *who = "   Who: ";
 char *os = "    OS: ";
-char *kernel = "Kernel: ";
-char *shell = " Shell: ";
+char *kernelv = "Kernel: ";
+char *ushell = " Shell: ";
 
-// Searches a file for a keyword and returns the line of text its found on
-char *search_file(char *search, char *file)
+// Gets username from passwd struct, otherwise uses default values
+char *get_username()
+{
+	char *username;
+
+	struct passwd *user = getpwuid(geteuid());
+
+	if (user) {
+		username = user->pw_name;
+	} else {
+		username = "user";
+	}
+
+	return username;
+}
+
+// Gets user's shell from passwd struct, otherwise uses default values
+char *get_shell()
+{
+	char *shell;
+
+	struct passwd *user = getpwuid(geteuid());
+
+	if (user) {
+		shell = user->pw_shell;
+	} else {
+		shell = "shell";
+	}
+
+	return shell;
+}
+
+// Gets hostname, otherwise uses default value
+char *get_hostname()
+{
+	struct utsname system;
+	uname(&system);
+
+	char *hostname = strdup(system.nodename);
+
+	if (!hostname) return "hostname";
+
+	return hostname;
+}
+
+// Gets kernel version, otherwise uses default value
+char *get_kernel()
+{
+	struct utsname sys;
+    	uname(&sys);
+
+    	char *kernel = strdup(sys.release);
+
+	if (!kernel) return "kernel";
+
+	return kernel;
+}
+
+// Searches /etc/os-release for the distro PRETTY_NAME and returns the line
+// its on, or returns a default value
+char *search_release()
 {
 	char line[1024];
 	char *name;
 	FILE *f;
+
+	char *file = "/etc/os-release";
+	char *search = "PRETTY_NAME";
 
 	f = fopen(file, "r");
 	if (f) {
@@ -55,10 +114,13 @@ char *search_file(char *search, char *file)
 	return name;
 }
 
-// Searches /etc/os-release for the 'pretty name', cleans it before returning
+// Upon retrieving the line the PRETTY_NAME is on, cleans it up before 
+// returning it.
 char *get_prettyname()
 {
-	char *prettyname = search_file("PRETTY_NAME", "/etc/os-release");
+	char *prettyname = search_release();
+
+	// If default value was used, just return it
 	if (!strcmp(prettyname, "something wild")) return prettyname;
 
 	// Removes first 13 characters, the "PRETTY_NAME='" 
@@ -72,34 +134,11 @@ char *get_prettyname()
 
 int main(void)
 {
-	char *username;
-	char *usershell;
-	char *hostname;
-	char *userkernel;
-	char *prettyname;
-	
-	struct passwd *user = getpwuid(geteuid());
-	// Gets details from passwd struct, otherwise uses default values
-	if (user) {
-		username = user->pw_name;
-		usershell = user->pw_shell;
-	} else {
-		username = "user";
-		usershell = "shell";
-	}
-
-	struct utsname system;
-	// Gets details from utsname struct, otherwise uses default values
-	if ((uname(&system)) > -1) {
-		hostname = system.nodename;
-		userkernel = system.release;
-	} else {
-		printf("error: %d", uname(&system));
-		hostname = "hostname";
-		userkernel = "kernel";
-	}
-	
-	prettyname = get_prettyname();
+	char *username = get_username();
+	char *hostname = get_hostname();
+	char *shell = get_shell();
+	char *kernel = get_kernel();
+	char *prettyname = get_prettyname();
 
 	// The user data is combined with the ascii art to form
 	// a cute little fetch thing.	
@@ -121,9 +160,12 @@ int main(void)
 		duck1,
 		duck2, who, username, hostname,
 		duck3, os, prettyname,
-		duck4, kernel, userkernel, 
-		duck5, shell, usershell
+		duck4, kernelv, kernel, 
+		duck5, ushell, shell
 	);
+
+	free(kernel);
+	free(hostname);
 	
 	return EXIT_SUCCESS;
 }
