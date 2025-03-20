@@ -17,6 +17,7 @@ char *get_kernel();
 char *search_release();
 char *get_prettyname();
 
+// ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
 char *duck1 = "        ,~~.   ";
 char *duck2 = "   ,   (  - )> ";
 char *duck3 = "   )`~~'   (   ";
@@ -38,7 +39,7 @@ char *get_username()
 	if (user) {
 		username = user->pw_name;
 	} else {
-		username = "user";
+		username = "unknown user";
 	}
 
 	return username;
@@ -54,7 +55,7 @@ char *get_shell()
 	if (user) {
 		shell = user->pw_shell;
 	} else {
-		shell = "shell";
+		shell = "unknown shell";
 	}
 
 	return shell;
@@ -68,7 +69,7 @@ char *get_hostname()
 
 	char *hostname = strdup(system.nodename);
 
-	if (!hostname) return "hostname";
+	if (!hostname) return "unknown hostname";
 
 	return hostname;
 }
@@ -81,7 +82,7 @@ char *get_kernel()
 
     	char *kernel = strdup(sys.release);
 
-	if (!kernel) return "kernel";
+	if (!kernel) return "unknown kernel";
 
 	return kernel;
 }
