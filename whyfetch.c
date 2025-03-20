@@ -70,25 +70,25 @@ char *combine_ascii(char* ascii, char* data)
 
 int main(void)
 {
+	// There's definitely a way to do this in two commands.
 	char *prettycommand = (
 		"cat /etc/os-release | grep PRETTY | cut -d '\"' -f2"
 	);
-
-	
-	char *username = get_commandout("echo $USER");
-	char *hostname = get_commandout("echo $HOSTNAME");
 
 	char *userhost = get_commandout("echo $USER@$HOSTNAME");
 	char *prettyname = get_commandout(prettycommand);
 	char *kernelv = get_commandout("uname -r");
 	char *usershell = get_commandout("echo $SHELL");
-
+	
+	// User data is combined with the ASCII art so it can be to the side
+	// of the text.
 	char *resultDuck2 = combine_ascii(duck2, userhost);
 	char *resultDuck3 = combine_ascii(duck3, prettyname);
 	char *resultDuck4 = combine_ascii(duck4, kernelv);
 	char *resultDuck5 = combine_ascii(duck5, usershell);
 	
-	
+	// The result duck is combined with the original duck to form
+	// a cute little fetch thing.	
 	puts("\n");
 	printf(
 		"%s\n%s\n%s\n%s\n%s\n",
