@@ -89,7 +89,7 @@ int main(void)
 	
 	// The result duck is combined with the original duck to form
 	// a cute little fetch thing.	
-	puts("\n");
+	puts("");
 	printf(
 		"%s\n%s\n%s\n%s\n%s\n",
 		duck1, resultDuck2, resultDuck3,
