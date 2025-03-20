@@ -7,9 +7,10 @@ Why make another fetch app?
 gcc  
   
 ## Install  
-Clone the repo ```git clone https://github.com/emzilia/whyfetch```  
-Enter the directory and build the program:  
+Clone the repo  
+Enter the directory and build the program   
 ```
+git clone https://github.com/emzilia/whyfetch
 cd whyfetch  
 make  
 make install   
