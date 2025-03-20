@@ -49,9 +49,8 @@ int main(void)
 {
 	// Command output is captured.
 	char *userhost = get_commandout("echo $USER@$HOSTNAME");
-	// There's definitely a way to do this in two commands.
 	char *prettyname = get_commandout(
-		"cat /etc/os-release | grep PRETTY | cut -d '\"' -f2"
+		"grep PRETTY /etc/os-release | cut -d '\"' -f2"
 	);
 	char *kernelv = get_commandout("uname -r");
 	char *usershell = get_commandout("echo $SHELL");
