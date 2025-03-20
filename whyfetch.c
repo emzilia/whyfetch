@@ -20,15 +20,27 @@ char *duck5 = "  `-.____,' 	\n";
 char *get_username(void)
 {
 	char *username = getenv("USER");
-	return username;
+
+	size_t namelength = strlen(username);
+
+	char *namecopy = malloc(namelength + 1);
+	strncpy(namecopy, username, namelength);
+	namecopy[namelength] = '\0';
+	return namecopy;
 }
 
 char *get_hostname(void)
 {
 	char *hostname = getenv("HOSTNAME");
-	return hostname;
-}
 
+	size_t hostlength = strlen(hostname);
+
+	char *hostcopy = malloc(hostlength + 1);
+	strncpy(hostcopy, hostname, hostlength);
+	hostcopy[hostlength] = '\0';
+	return hostcopy;
+
+}
 char *get_prettyname(void)
 {
 	const int bufferSize = 32;
