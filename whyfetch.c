@@ -21,7 +21,7 @@ char *duck5 = "  `-.____,' 	 Shell: ";
 // User data is acquired by saving the output of serveral commands,
 // detailed below. The command output is piped in and null terminated
 // before being returned.
-char * get_commandout(char *usercommand)
+char *get_commandout(char *usercommand)
 {
 	const int bufferSize = 32;
 	char buffer[bufferSize];
@@ -75,6 +75,7 @@ int main(void)
 		"cat /etc/os-release | grep PRETTY | cut -d '\"' -f2"
 	);
 
+	// Command output is captured.
 	char *userhost = get_commandout("echo $USER@$HOSTNAME");
 	char *prettyname = get_commandout(prettycommand);
 	char *kernelv = get_commandout("uname -r");
@@ -95,5 +96,5 @@ int main(void)
 		resultDuck4, resultDuck5
 	);
 
-    return 0;
+	return 0;
 }
