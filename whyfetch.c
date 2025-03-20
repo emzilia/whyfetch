@@ -18,28 +18,17 @@ char *duck3 = "  )`~~'   (	    OS: ";
 char *duck4 = " (  .__)   )	Kernel: ";
 char *duck5 = "  `-.____,' 	 Shell: ";
 
-// Username acquired from environment variable, ensures null termination.
-char *get_username(void)
-{
-	char *username = getenv("USER");
-
-	size_t namelength = strlen(username);
-
-	char *namecopy = malloc(namelength + 1);
-	strncpy(namecopy, username, namelength);
-	namecopy[namelength] = '\0';
-	return namecopy;
-}
-
-// Hostname acquired by piping in the output of the hostname command.
-char *get_hostname(void)
+// User data is acquired by saving the output of serveral commands,
+// detailed below. The command output is piped in and null terminated
+// before being returned.
+char * get_commandout(char *usercommand)
 {
 	const int bufferSize = 32;
 	char buffer[bufferSize];
 	char *result = NULL;
 	size_t resultSize = 0;
 
-	FILE *p = popen("hostname", "r");
+	FILE *p = popen(usercommand, "r");
 	if (p == NULL) return NULL;
 	
 	while (fgets(buffer, bufferSize, p) != NULL) {
@@ -61,83 +50,7 @@ char *get_hostname(void)
 	finalResult[strcspn(finalResult, "\n")] = 0;
 
 	return finalResult;
-}
 
-
-// Pretty OS name taken from /etc/os-release, piped in from a series
-// of commands.
-char *get_prettyname(void)
-{
-	const int bufferSize = 32;
-	char buffer[bufferSize];
-	char *result = NULL;
-	size_t resultSize = 0;
-
-	const char *command = (
-		"cat /etc/os-release | grep PRETTY | cut -d '\"' -f2"
-	);
-	
-	FILE *p = popen(command, "r");
-	if (p == NULL) return NULL;
-	
-	while (fgets(buffer, bufferSize, p) != NULL) {
-		size_t fragmentSize = strlen(buffer);
-		char *newResult = realloc(
-			result, resultSize + fragmentSize + 1
-		);
-		result = newResult;
-		memcpy(result + resultSize, buffer, fragmentSize);
-		resultSize += fragmentSize;
-	}
-
-	int status = pclose(p);
-	if (status == -1) free(result);
-
-	char*finalResult = realloc(result, resultSize + 1);
-	finalResult[resultSize] = '\0';
-
-	finalResult[strcspn(finalResult, "\n")] = 0;
-
-	return finalResult;
-}
-
-// Current shell also taken from environment.
-char *get_shell(void)
-{
-    char *shell = getenv("SHELL");
-    return shell;
-} 
-
-// Kernel version from piping in the output of uname -r.
-char *get_kernelv(void)
-{
-	const int bufferSize = 32;
-	char buffer[bufferSize];
-	char *result = NULL;
-	size_t resultSize = 0;
-
-	FILE *p = popen("uname -r", "r");
-	if (p == NULL) return NULL;
-	
-	while (fgets(buffer, bufferSize, p) != NULL) {
-		size_t fragmentSize = strlen(buffer);
-		char *newResult = realloc(
-			result, resultSize + fragmentSize + 1
-		);
-		result = newResult;
-		memcpy(result + resultSize, buffer, fragmentSize);
-		resultSize += fragmentSize;
-	}
-
-	int status = pclose(p);
-	if (status == -1) free(result);
-
-	char*finalResult = realloc(result, resultSize + 1);
-	finalResult[resultSize] = '\0';
-
-	finalResult[strcspn(finalResult, "\n")] = 0;
-
-	return finalResult;
 }
 
 // Both the username and hostname are combined with a @ sign separating them.
@@ -173,13 +86,18 @@ char *combine_ascii(char* ascii, char* data)
 
 int main(void)
 {
-	char *username = get_username();
-	char *hostname = get_hostname();
+	char *prettycommand = (
+		"cat /etc/os-release | grep PRETTY | cut -d '\"' -f2"
+	);
+
+	
+	char *username = get_commandout("echo $USER");
+	char *hostname = get_commandout("hostname");
 
 	char *userhost = combine_userhost(username, hostname);
-	char *prettyname = get_prettyname();
-	char *kernelv = get_kernelv();
-	char *usershell = get_shell();
+	char *prettyname = get_commandout(prettycommand);
+	char *kernelv = get_commandout("uname -r");
+	char *usershell = get_commandout("echo $SHELL");
 
 	char *resultDuck2 = combine_ascii(duck2, userhost);
 	char *resultDuck3 = combine_ascii(duck3, prettyname);
