@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pwd.h>
 
 char *get_commandout(char *usercommand);
-char *combine_ascii(char* ascii, char* data);
+char *combine_ascii(char *ascii, char *data);
 
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
 char *duck1 = "       ,~~.	   	";
@@ -20,36 +19,35 @@ char *get_commandout(char *usercommand)
 {
 	const int bufferSize = 32;
 	char buffer[bufferSize];
-	char *result = NULL;
-	size_t resultSize = 0;
+	char *output = NULL;
+	size_t outputSize = 0;
 
 	FILE *p = popen(usercommand, "r");
 	if (p == NULL) return NULL;
 	
 	while (fgets(buffer, bufferSize, p) != NULL) {
 		size_t fragmentSize = strlen(buffer);
-		char *newResult = realloc(
-			result, resultSize + fragmentSize + 1
+		char *newOutput = realloc(
+			output, outputSize + fragmentSize + 1
 		);
-		result = newResult;
-		memcpy(result + resultSize, buffer, fragmentSize);
-		resultSize += fragmentSize;
+		output = newOutput;
+		memcpy(output + outputSize, buffer, fragmentSize);
+		outputSize += fragmentSize;
 	}
 
 	int status = pclose(p);
-	if (status == -1) free(result);
+	if (status == -1) free(output);
 
-	char*finalResult = realloc(result, resultSize + 1);
-	finalResult[resultSize] = '\0';
+	char *finalOutput = realloc(output, outputSize + 1);
+	finalOutput[outputSize] = '\0';
+	finalOutput[strcspn(finalOutput, "\n")] = 0;
 
-	finalResult[strcspn(finalResult, "\n")] = 0;
-
-	return finalResult;
+	return finalOutput;
 
 }
 
 // ASCII art is combined with the previous data, so it's evenly spaced.
-char *combine_ascii(char* ascii, char* data)
+char *combine_ascii(char *ascii, char *data)
 {
 	size_t resultSize = (
 		strlen(ascii) + strlen(data) + 1
@@ -65,14 +63,12 @@ char *combine_ascii(char* ascii, char* data)
 
 int main(void)
 {
-	// There's definitely a way to do this in two commands.
-	char *prettycommand = (
-		"cat /etc/os-release | grep PRETTY | cut -d '\"' -f2"
-	);
-
 	// Command output is captured.
 	char *userhost = get_commandout("echo $USER@$HOSTNAME");
-	char *prettyname = get_commandout(prettycommand);
+	// There's definitely a way to do this in two commands.
+	char *prettyname = get_commandout(
+		"cat /etc/os-release | grep PRETTY | cut -d '\"' -f2"
+	);
 	char *kernelv = get_commandout("uname -r");
 	char *usershell = get_commandout("echo $SHELL");
 	
