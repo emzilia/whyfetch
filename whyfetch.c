@@ -60,7 +60,7 @@ char *get_shell()
 	return shell;
 }
 
-// Gets hostname, otherwise uses default value
+// Gets hostname from utsname struct, otherwise uses default value
 char *get_hostname()
 {
 	struct utsname system;
@@ -73,7 +73,7 @@ char *get_hostname()
 	return hostname;
 }
 
-// Gets kernel version, otherwise uses default value
+// Gets kernel version from utsname struct, otherwise uses default value
 char *get_kernel()
 {
 	struct utsname sys;
@@ -108,7 +108,6 @@ char *search_release()
 		}
 	}
 
-	// Default if nothing is found or file couldn't be opened
 	name = "something wild";
 
 	return name;
@@ -166,6 +165,7 @@ int main(void)
 
 	free(kernel);
 	free(hostname);
+	free(prettyname);
 	
 	return EXIT_SUCCESS;
 }
