@@ -58,7 +58,8 @@ char *get_commandout(char *usercommand)
 int main(void)
 {
 	// Command output is captured.
-	char *userhost = get_commandout("echo $USER@$HOSTNAME");
+	char *username = get_commandout("whoami");
+	char *userhost = get_commandout("hostname");
 	char *prettyname = get_commandout(
 		"grep PRETTY /etc/os-release | cut -d '\"' -f2"
 	);
@@ -71,7 +72,7 @@ int main(void)
 		ANSI_COLOR_YELLOW	"\n%s"	ANSI_COLOR_RESET
 		ANSI_COLOR_YELLOW	"\n%s"	ANSI_COLOR_RESET
 		ANSI_COLOR_MAGENTA 	"%s" 	ANSI_COLOR_RESET
-		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_WHITE 	"%s@%s" 	ANSI_COLOR_RESET
 		ANSI_COLOR_YELLOW 	"\n%s" 	ANSI_COLOR_RESET
 		ANSI_COLOR_MAGENTA 	"%s" 	ANSI_COLOR_RESET
 		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
@@ -83,7 +84,7 @@ int main(void)
 		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
 		"\n\n\n",
 		duck1,
-		duck2, who, userhost,
+		duck2, who, username, userhost,
 		duck3, os, prettyname,
 		duck4, kernel, kernelv, 
 		duck5, shell, usershell
