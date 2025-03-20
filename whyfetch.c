@@ -3,12 +3,7 @@
 #include <string.h>
 #include <pwd.h>
 
-char *get_username(void);
-char *get_hostname(void);
-char *get_prettyname(void);
-char *get_shell(void);
-char *get_kernelv(void);
-char *combine_userhost(char *username, char *hostname);
+char *get_commandout(char *usercommand);
 char *combine_ascii(char* ascii, char* data);
 
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
