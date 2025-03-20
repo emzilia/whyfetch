@@ -38,7 +38,7 @@ char *get_prettyname(void)
 
 	const char *command = (
 		"cat /etc/os-release | grep PRETTY | cut -d '\"' -f2"
-		);
+	);
 	
 	FILE *p = popen(command, "r");
 	if (p == NULL) return NULL;
@@ -63,6 +63,7 @@ char *get_prettyname(void)
 
 	return finalResult;
 }
+
 char *get_shell(void)
 {
     char *shell = getenv("SHELL");
@@ -102,10 +103,10 @@ char *get_kernelv(void)
 
 char *combine_userhost(char *username, char *hostname)
 {
-	const char *atsign = "@";
+	char *atsign = "@";
 
 	size_t resultSize = (
-		strlen(username) + 1 + strlen(hostname) + 1
+		strlen(username) + strlen(atsign) + strlen(hostname) + 1
 	);
 
 	char *result = (char*)malloc(resultSize);
@@ -139,17 +140,18 @@ int main(void)
 	char *kernelv = get_kernelv();
 	char *usershell = get_shell();
 
-	char *resultDuck1 = combine_ascii(duck1, userhost);
-	char *resultDuck2 = combine_ascii(duck2, prettyname);
-	char *resultDuck3 = combine_ascii(duck3, kernelv);
-	char *resultDuck4 = combine_ascii(duck4, usershell);
+	//char *resultDuck1 = combine_ascii(duck1, userhost);
+	//char *resultDuck2 = combine_ascii(duck2, prettyname);
+	//char *resultDuck3 = combine_ascii(duck3, kernelv);
+	//char *resultDuck4 = combine_ascii(duck4, usershell);
 	//char *resultDuck5 = combine_ascii(duck1, userhost);
 	
 	
 	printf(
 		"%s\n%s\n%s\n%s\n%s\n",
-		resultDuck1, resultDuck2, resultDuck3,
-		resultDuck4, duck5
+		duck1, duck2, duck3,
+		duck4, duck5
 	);
 
+    return 0;
 }
