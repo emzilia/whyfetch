@@ -6,11 +6,11 @@ char *get_commandout(char *usercommand);
 char *combine_ascii(char *ascii, char *data);
 
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
-char *duck1 = "       ,~~.	   	";
-char *duck2 = "  ,   (  - )>	   Who: ";
-char *duck3 = "  )`~~'   (	    OS: ";
-char *duck4 = " (  .__)   )	Kernel: ";
-char *duck5 = "  `-.____,' 	 Shell: ";
+char *duck1 = "        ,~~.            ";
+char *duck2 = "   ,   (  - )>     Who: ";
+char *duck3 = "   )`~~'   (        OS: ";
+char *duck4 = "  (  .__)   )   Kernel: ";
+char *duck5 = "   `-.____,'     Shell: ";
 
 // User data is acquired by saving the output of serveral commands,
 // detailed below. The command output is piped in and null terminated
