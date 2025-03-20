@@ -3,7 +3,7 @@ Why make another fetch app?
 
 ![whyfetch](https://i.ibb.co/PcYkKhv/whyfetch.png)
 
-#### Dependencies
+### Dependencies:
 gcc  
   
 ## Install  
