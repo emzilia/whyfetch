@@ -2,19 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define ANSI_COLOR_YELLOW	"\x1b[33m"
 #define ANSI_COLOR_MAGENTA	"\x1b[35m"
 #define ANSI_COLOR_WHITE	"\x1b[37m"
 #define ANSI_COLOR_RESET	"\x1b[0m"
 
 char *get_commandout(char *usercommand);
 
-
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
-char *duck1 = "        ,~~.            ";
-char *duck2 = "   ,   (  - )>     Who: ";
-char *duck3 = "   )`~~'   (        OS: ";
-char *duck4 = "  (  .__)   )   Kernel: ";
-char *duck5 = "   `-.____,'     Shell: ";
+char *duck1 = "        ,~~.   ";
+char *duck2 = "   ,   (  - )> ";
+char *duck3 = "   )`~~'   (   ";
+char *duck4 = "  (  .__)   )  ";
+char *duck5 = "   `-.____,'   ";
+
+char *who = "   Who: ";
+char *os = "    OS: ";
+char *kernel = "Kernel: ";
+char *shell = " Shell: ";
 
 // User data is acquired by saving the output of serveral commands,
 // the command output is piped in and null terminated
@@ -64,20 +69,24 @@ int main(void)
 	// a cute little fetch thing.	
 	printf(
 		ANSI_COLOR_MAGENTA "\n%s" ANSI_COLOR_RESET
-		ANSI_COLOR_MAGENTA	"\n%s"	ANSI_COLOR_RESET
+		ANSI_COLOR_YELLOW	"\n%s"	ANSI_COLOR_RESET
+		ANSI_COLOR_MAGENTA 	"%s" 	ANSI_COLOR_RESET
 		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
-		ANSI_COLOR_MAGENTA 	"\n%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_YELLOW 	"\n%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_MAGENTA 	"%s" 	ANSI_COLOR_RESET
 		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
-		ANSI_COLOR_MAGENTA 	"\n%s"	ANSI_COLOR_RESET
+		ANSI_COLOR_YELLOW 	"\n%s"	ANSI_COLOR_RESET
+		ANSI_COLOR_MAGENTA	"%s" 	ANSI_COLOR_RESET
 		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
-		ANSI_COLOR_MAGENTA 	"\n%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_YELLOW 	"\n%s" 	ANSI_COLOR_RESET
+		ANSI_COLOR_MAGENTA	"%s" 	ANSI_COLOR_RESET
 		ANSI_COLOR_WHITE 	"%s" 	ANSI_COLOR_RESET
 		"\n\n\n",
 		duck1,
-		duck2, userhost,
-		duck3, prettyname,
-		duck4, kernelv, 
-		duck5, usershell
+		duck2, who, userhost,
+		duck3, os, prettyname,
+		duck4, kernel, kernelv, 
+		duck5, shell, usershell
 	);
 	
 	return 0;
