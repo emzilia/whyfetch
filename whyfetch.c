@@ -10,8 +10,8 @@
 #define ANSI_COLOR_WHITE	"\x1b[97m"
 #define ANSI_COLOR_RESET	"\x1b[0m"
 
-char *get_commandout(char *usercommand);
-char *get_username();
+char *search_file(char *search, char *file);
+char *get_prettyname();
 
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
 char *duck1 = "        ,~~.   ";
@@ -34,11 +34,13 @@ char *search_file(char *search, char *file)
 
 	name = (char *)malloc(1024*sizeof(char));
 	f = fopen(file, "r");
-	while (fgets(line, sizeof(line), f) != NULL) {
-		if (strstr(line, search) != NULL) {
-			name = (char *)malloc(sizeof(line) - 1);
-			strncpy(name, line, sizeof(line) - 1);
-			return name;
+	if (f) {
+		while (fgets(line, sizeof(line), f) != NULL) {
+			if (strstr(line, search) != NULL) {
+				name = (char *)malloc(sizeof(line) - 1);
+				strncpy(name, line, sizeof(line) - 1);
+				return name;
+			}
 		}
 	}
 
