@@ -12,7 +12,7 @@ char *combine_userhost(char *username, char *hostname);
 char *combine_ascii(char* ascii, char* data);
 
 // ASCII art courtesy of Hayley Jane Wakenshaw of asciiart.eu
-char *duck1 = "\n       ,~~.	   	";
+char *duck1 = "       ,~~.	   	";
 char *duck2 = "  ,   (  - )>	   Who: ";
 char *duck3 = "  )`~~'   (	    OS: ";
 char *duck4 = " (  .__)   )	Kernel: ";
@@ -53,22 +53,6 @@ char * get_commandout(char *usercommand)
 
 }
 
-// Both the username and hostname are combined with a @ sign separating them.
-char *combine_userhost(char *username, char *hostname)
-{
-	char *atsign = "@";
-
-	size_t resultSize = (
-		strlen(username) + strlen(atsign) + strlen(hostname) + 1
-	);
-
-	char *result = (char*)malloc(resultSize);
-
-	sprintf(result, "%s%s%s", username, atsign, hostname);
-
-	return result;
-}
-
 // ASCII art is combined with the previous data, so it's evenly spaced.
 char *combine_ascii(char* ascii, char* data)
 {
@@ -92,9 +76,9 @@ int main(void)
 
 	
 	char *username = get_commandout("echo $USER");
-	char *hostname = get_commandout("hostname");
+	char *hostname = get_commandout("echo $HOSTNAME");
 
-	char *userhost = combine_userhost(username, hostname);
+	char *userhost = get_commandout("echo $USER@$HOSTNAME");
 	char *prettyname = get_commandout(prettycommand);
 	char *kernelv = get_commandout("uname -r");
 	char *usershell = get_commandout("echo $SHELL");
@@ -105,6 +89,7 @@ int main(void)
 	char *resultDuck5 = combine_ascii(duck5, usershell);
 	
 	
+	puts("\n");
 	printf(
 		"%s\n%s\n%s\n%s\n%s\n",
 		duck1, resultDuck2, resultDuck3,
