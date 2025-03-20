@@ -52,7 +52,6 @@ char *get_commandout(char *usercommand)
 	finalOutput[strcspn(finalOutput, "\n")] = 0;
 
 	return finalOutput;
-
 }
 
 int main(void)
