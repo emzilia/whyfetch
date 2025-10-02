@@ -78,9 +78,9 @@ char *get_hostname()
 char *get_kernel()
 {
 	struct utsname sys;
-    	uname(&sys);
+	uname(&sys);
 
-    	char *kernel = strdup(sys.release);
+	char *kernel = strdup(sys.release);
 
 	if (!kernel) return "unknown kernel";
 
